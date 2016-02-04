@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
 
 	private Rigidbody rb;
 
+	//public Camera viewCamera;
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -21,9 +23,24 @@ public class PlayerController : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		float moveHorizontal = Input.GetAxis ("Horizontal");
+		/*float moveHorizontal = Input.GetAxis ("Horizontal");
 		float moveVertical = Input.GetAxis ("Vertical");
-		transform.Translate (speed * moveHorizontal, 0f, speed * moveVertical);
+		transform.Translate (speed * moveHorizontal, 0f, speed * moveVertical);*/
+
+
+		Vector3 cameraForward = Camera.main.transform.forward;
+		Vector3 cameraRight = Camera.main.transform.right;
+		Vector3.Normalize (cameraForward);
+		Vector3.Normalize (cameraRight);
+		float moveVertical = Input.GetAxis ("Vertical") * speed * Time.deltaTime;
+		float moveHorizontal = Input.GetAxis ("Horizontal") * speed * Time.deltaTime;
+		cameraForward = cameraForward * moveVertical;
+		cameraForward.y = 0;
+		cameraRight = cameraRight * moveHorizontal;
+		cameraRight.y = 0;
+		transform.Translate(cameraForward);
+		transform.Translate (cameraRight);
+
 	}
 
 	void FixedUpdate () 
